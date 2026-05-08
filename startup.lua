@@ -13,7 +13,7 @@ for dir, files in pairs(directories) do
 	for _, file in pairs(files) do
 		print("Downloading " .. file)
 
-		shell.run("wget", base .. dir .. "/" .. file, dir .. "/" .. file)
+		shell.run("wget -f", base .. dir .. "/" .. file, dir .. "/" .. file)
 	end
 end
 
