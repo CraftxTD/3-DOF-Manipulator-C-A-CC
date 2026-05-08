@@ -1,0 +1,47 @@
+-- NOTE: Controller example test, must be re-run everytime
+
+local channels = require("protocols.channels")
+local network = require("protocols.network")
+local calculate = require("protocols.calculate")
+
+local modem = peripheral.find("modem") or error("No modem", 0)
+modem.open(channels.CONTROLLER)
+
+local event, a, channel, message
+
+network.poll(channels.SHIP_DOCK, 1)
+
+print("Found ship.. ")
+local data = calculate.angles(message)
+
+-- Waits until the ring bearing has moved
+modem.transmit(channels.LIMB_RING_BEARING, channels.CONTROLLER, data.center_pivot)
+poll(channels.CONTROLLER, 1)
+
+-- Waits until limb 1 has moved
+modem.transmit(channels.LIMB_1, channels.CONTROLLER, data.limb1_angle)
+poll(channels.CONTROLLER, 1)
+
+-- Waits until limb 2 has moved
+modem.transmit(channels.LIMB_2, channels.CONTROLLER, data.limb2_angle)
+modem.transmit(channels.LIMB_DOCK_BEARING, channels.CONTROLLER, data.dock_pivot)
+
+for _, bearing in pairs(data) do
+	bearing.dir = -bearing.dir
+end
+
+sleep(10)
+
+-- Waits until the ring bearing has moved
+modem.transmit(channels.LIMB_RING_BEARING, channels.CONTROLLER, data.center_pivot)
+poll(channels.CONTROLLER, 1)
+
+-- Waits until limb 1 has moved
+modem.transmit(channels.LIMB_1, channels.CONTROLLER, data.limb1_angle)
+poll(channels.CONTROLLER, 1)
+
+-- Waits until limb 2 has moved
+modem.transmit(channels.LIMB_2, channels.CONTROLLER, data.limb2_angle)
+modem.transmit(channels.LIMB_DOCK_BEARING, channels.CONTROLLER, data.dock_pivot)
+
+sleep(10)

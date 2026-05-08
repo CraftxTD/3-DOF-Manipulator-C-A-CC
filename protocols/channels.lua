@@ -1,9 +1,11 @@
 return {
-	controller = 9200,
-	limb_ring_bearing = 9201,
-	limb_1 = 9202,
-	limb_2 = 9203,
-	limb_dock_bearing = 9204,
-	ship_dock = 9500,
-	ship_pivot = 9501,
+	CONTROLLER = 9200,
+	LIMB_RING_BEARING = 9201,
+	LIMB_1 = 9202,
+	LIMB_2 = 9203,
+	LIMB_DOCK_BEARING = 9204,
+
+	-- Both ship dock and ship pivot can be used for multiple ships
+	SHIP_DOCK = 9500,
+	SHIP_PIVOT = 9501,
 }

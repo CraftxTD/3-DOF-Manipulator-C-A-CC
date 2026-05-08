@@ -1,53 +1,62 @@
 -- Gets position of the dock and sends it to the calculator
--- Set channel frequency here
-local localChannel = 10
-local calculatorChannel = 5
-local pivotChannel = 11
+local channels = require("protocols.channels")
+local network = require("protocols.network")
+local geometry = require("protocols.geometry")
+local calculate = require("protocols.calculate")
 local modem = peripheral.find("modem") or error("No modem", 0)
-modem.open(localChannel)
+modem.open(channels.SHIP_DOCK)
 
 -- Offset values (numbers in parenthesis, these are LOCAL coordinates)
+-- MUST BE CALIBRATED FOR EVERY SHIP.
 -- Used to determine where the dock is with max precision,
 -- assuming that the paired docking connector is 180 degrees
 -- opposite of the pivot computer.
-local arm_x = -3
-local arm_y = -4
-local x = -1 + arm_x
-local y = -1 + arm_y
-local z = 0
+local x = -1 + geometry.DOCK_X
+local y = -1 + geometry.DOCK_Y
+local z = 0 + geometry.DOCK_Z
 
--- Timer
--- Ship Dock Pivot channel
-local event, a, channel, message
+-- Approximate distance between dock and ship. Used to filter other different ships.
+local dock_to_pivot = 6
+
+for _, name in ipairs(peripheral.getNames()) do
+	print(string.format("Found peripheral %a to the %b..", peripheral.getType(name), name))
+end
+
+-- For checking if in docking mode
+local relay_lever = "top"
+
+-- For checking if docked. This uses the
+-- comparator value from the dock connector.
+local relay_check_dock = "right"
+
 while true do
-	modem.transmit(pivotChannel, localChannel)
-	local wait = os.startTimer(2)
+	-- Check if docked
+	if redstone.getAnalogInput(relay_check_dock) > 14 then
+		sleep(1)
+	else
+		-- Waits for a redstone output
+		if network.poll_redstone(relay_lever, 1, 1) then
+			-- Location updates every 0.5 seconds
+			pivot = network.poll(channels.SHIP_PIVOT, 0.5)
+			local this = sublevel.getLogicalPose().position
 
-	while true do
-		event, a, channel, _, message = os.pullEvent()
-
-		if event == "modem_message" then
-			print("Got pivot coordinates.. ")
-			local localCoords = sublevel.getLogicalPose().position
-
-			local data = {
+			local coordinates = {
 				offset_x = x,
 				offset_y = y,
 				offset_z = z,
-				x1 = localCoords.x,
-				y1 = localCoords.y,
-				z1 = localCoords.z,
-				x2 = message.x,
-				y2 = message.y,
-				z2 = message.z,
+				x1 = this.x,
+				y1 = this.y,
+				z1 = this.z,
+				x2 = pivot.x,
+				y2 = pivot.y,
+				z2 = pivot.z,
 			}
-			print("Sent to calculator computer.. ")
-			modem.transmit(calculatorChannel, localChannel, data)
-			break
-		elseif event == "timer" and a == wait then
-			print("Waiting response.. ")
-			break
+			if calculate.filter_ship(coordinates, dock_to_pivot) then
+				modem.transmit(channels.CONTROLLER, channels.SHIP_DOCK, coordinates)
+				print("Sent to controller.. ")
+			else
+				print("Wrong ship.. ")
+			end
 		end
 	end
-	sleep(2)
 end
