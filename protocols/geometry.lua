@@ -13,9 +13,9 @@ return {
 	-- The arm angle relative to the xz plane.
 	INITIAL_ARM_ANGLE = math.pi / 2,
 	-- Offset of dock relative to the second limb's point.
-	-- These coordinates are considered relative to a ship's
+	-- These coordinates are then converted to the ship dock's
 	-- local coordinates.
-	DOCK_X = -3,
-	DOCK_Y = -4,
+	DOCK_X = 1,
+	DOCK_Y = -6,
 	DOCK_Z = 0,
 }

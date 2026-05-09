@@ -12,9 +12,9 @@ modem.open(channels.SHIP_DOCK)
 -- Used to determine where the dock is with max precision,
 -- assuming that the paired docking connector is 180 degrees
 -- opposite of the pivot computer.
-local x = -1 + geometry.DOCK_X
-local y = -1 + geometry.DOCK_Y
-local z = 0 + geometry.DOCK_Z
+local x = -1 - geometry.DOCK_X
+local y = -1 - geometry.DOCK_Y
+local z = 0 - geometry.DOCK_Z
 
 -- Approximate distance between dock and ship. Used to filter other different ships.
 local dock_to_pivot = 12

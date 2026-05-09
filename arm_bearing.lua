@@ -1,9 +1,20 @@
 package.path = package.path .. ";/?.lua"
--- This is used to control the rotation of the dock bearings and to detect if it is docked.
+
+-- This is used to control the rotation of the ring, limb 1 and limb 2 bearings.
 local channels = require("protocols.channels")
 local network = require("protocols.network")
+local args = { ... }
+local localChannel
+if args[1] == "1" then
+	localChannel = channels.LIMB_RING_BEARING
+elseif args[1] == "2" then
+	localChannel = channels.LIMB_1
+elseif args[1] == "3" then
+	localChannel = channels.LIMB_2
+elseif args[1] == "4" then
+	localChannel = channels.LIMB_DOCK_BEARING
+end
 
-local localChannel = channels.LIMB_DOCK_BEARING
 local modem = peripheral.find("modem") or error("No modem", 0)
 modem.open(localChannel)
 
@@ -12,7 +23,6 @@ for _, name in ipairs(peripheral.getNames()) do
 end
 
 local gearshift = peripheral.wrap("right")
-local redstone_relay = "bottom"
 local data
 
 while true do
@@ -24,9 +34,4 @@ while true do
 	end
 
 	modem.transmit(channels.CONTROLLER, channels.CONTROLLER, _)
-
-	-- TODO: Move this to controller
-	-- Check if dock successfully
-	-- network.poll_redstone(redstone_relay, 15, 1)
-	-- modem.transmit()
 end
