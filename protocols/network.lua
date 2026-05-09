@@ -39,7 +39,6 @@ end
 -- This assumes only one redstone input can be on at
 -- a given time.
 function network.poll_redstone_all(time)
-	signal_strength = math.min(signal_strength, 14)
 	-- Timer
 	local timer = os.startTimer(time)
 	local event, key

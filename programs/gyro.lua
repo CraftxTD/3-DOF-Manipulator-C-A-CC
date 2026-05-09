@@ -1,12 +1,13 @@
 package.path = package.path .. ";/?.lua"
 local network = require("protocols.network")
+local args = { ... }
 local sign
 if args[1] == "1" then
 	sign = 1
 elseif args[1] == "2" then
 	sign = -1
 else
-	printError("Must have parameter 1 (positive) or 2 (negative).")
+	sign = 1
 end
 
 for _, name in ipairs(peripheral.getNames()) do
@@ -21,6 +22,6 @@ while true do
 	if side == "left" then
 		rotation_speed_controller.setTargetSpeed(speed)
 	elseif side == "right" then
-		rotation_speed_controller.setTargetSpeed(speed)
+		rotation_speed_controller.setTargetSpeed(-speed)
 	end
 end
