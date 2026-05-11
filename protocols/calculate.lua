@@ -3,6 +3,7 @@ local geometry = require("protocols.geometry")
 local matrix = require("libs.matrix")
 local calculate = {}
 -- Ship angles
+-- Z in inverted direction
 local Rz, Ry, Rx
 local dock_offset
 
@@ -115,16 +116,16 @@ function calculate.process(raw)
 	})
 	Rx = matrix:new({
 		{ 1, 0, 0 },
-		{ 0, -math.cos(ship_zy), math.sin(ship_zy) },
-		{ 0, math.sin(ship_zy), math.cos(ship_zy) },
+		{ 0, math.cos(ship_zy), math.sin(ship_zy) },
+		{ 0, -math.sin(ship_zy), math.cos(ship_zy) },
 	})
 	Ry = matrix:new({
 		{ math.cos(ship_zx), 0, -math.sin(ship_zx) },
 		{ 0, 1, 0 },
 		{
-			-math.sin(ship_zx),
+			math.sin(ship_zx),
 			0,
-			-math.cos(ship_zx),
+			math.cos(ship_zx),
 		},
 	})
 

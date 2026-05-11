@@ -41,6 +41,7 @@ while true do
 			zy = slave1.zy,
 			altitude = slave2.altitude,
 			gimbal = slave2.gimbal,
+			dock_offset = dock_offset,
 		}
 		print(string.format("raw xy: %f", raw.xy))
 		print(string.format("raw north: %f", raw.north))
