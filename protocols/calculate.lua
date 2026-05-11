@@ -105,17 +105,17 @@ function calculate.process(raw)
 	ship_zx = 2 * math.pi - (math.pi + raw.north)
 
 	-- Initialize the rotation matrices
-	Rz = matrix.new({
+	Rz = matrix:new({
 		{ math.cos(ship_xy), -math.sin(ship_xy), 0 },
 		{ math.sin(ship_xy), math.cos(ship_xy), 0 },
 		{ 0, 0, 1 },
 	})
-	Rx = matrix.new({
+	Rx = matrix:new({
 		{ 1, 0, 0 },
 		{ 0, -math.cos(ship_zy), math.sin(ship_zy) },
 		{ 0, math.sin(ship_zy), math.cos(ship_zy) },
 	})
-	Ry = matrix.new({
+	Ry = matrix:new({
 		{ math.cos(ship_zx), 0, -math.sin(ship_zx) },
 		{ 0, 1, 0 },
 		{
