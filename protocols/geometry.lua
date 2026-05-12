@@ -26,9 +26,9 @@ return {
 	-- DO NOT CHANGE UNLESS YOU KNOW WHAT YOU'RE DOING
 
 	BLOCK_OFFSETS = {
-		ZY = vector.new(1, 0, 0),
+		ZY = vector.new(1, 0, -1),
 		XY = vector.new(-1, 0, 0),
-		ZX = vector.new(1, 0, -1),
+		ZX = vector.new(-1, 0, -1),
 		ALTITUDE = vector.new(-1, 0, -2),
 	},
 }
