@@ -46,7 +46,6 @@ while true do
 			dock_offset = dock_offset,
 		}
 		print(string.format("raw xy: %f", raw.xy))
-		print(string.format("raw north: %f", raw.north))
 		print(string.format("raw zy: %f", raw.zy))
 		print(string.format("raw altitude: %f", raw.altitude))
 

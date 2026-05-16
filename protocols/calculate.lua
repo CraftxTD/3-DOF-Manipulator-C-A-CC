@@ -102,7 +102,9 @@ function calculate.process(raw)
 	-- Convert every raw value except gimbals into rad
 	raw.zy = math.rad(raw.zy)
 	raw.xy = math.rad(raw.xy)
-	raw.north = math.rad(raw.north)
+	raw.north_xz = math.rad(raw.north_xz)
+	raw.north_xy = math.rad(raw.north_xy)
+	raw.north_zy = math.rad(raw.north_zy)
 
 	-- Initialize base coordinates
 	local zy, xy
@@ -123,9 +125,9 @@ function calculate.process(raw)
 	ship_xy = -math.rad(raw.gimbal[2])
 	ship_zy = math.rad(raw.gimbal[1])
 	yaw_vector = vector.new(
-		(math.cos(math.rad(2 * math.pi - raw.north_xz))) + (math.cos(math.rad(2 * math.pi - raw.north_xy))),
-		(math.sin(math.rad(2 * math.pi - raw.north_xy))) + (math.sin(math.rad(2 * math.pi - raw.north_zy))),
-		(-math.sin(math.rad(2 * math.pi - raw.north_xz))) + (-math.cos(math.rad(2 * math.pi - raw.north_zy)))
+		(math.cos(2 * math.pi - raw.north_xz)) + (math.cos(2 * math.pi - raw.north_xy)),
+		(math.sin(2 * math.pi - raw.north_xy)) + (math.sin(2 * math.pi - raw.north_zy)),
+		(-math.sin(2 * math.pi - raw.north_xz)) + (-math.cos(2 * math.pi - raw.north_zy))
 	)
 
 	-- NOTE: Cross product strategy
