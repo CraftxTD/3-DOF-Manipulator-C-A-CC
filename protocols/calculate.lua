@@ -29,7 +29,7 @@ end
 local function get_yaw(yaw_vector)
 	local rotated_vector = matrix:new({ { yaw_vector.x }, { yaw_vector.y }, { yaw_vector.z } })
 	-- Rotate by X, then by Z
-	local rotation_order = matrix.mul(invert_Rx, invert_Ry)
+	local rotation_order = matrix.mul(invert_Rz, invert_Rx)
 	rotated_vector = matrix.mul(rotation_order, rotated_vector)
 	return vector.new(rotated_vector[1][1], rotated_vector[2][1], rotated_vector[3][1])
 end
@@ -146,14 +146,6 @@ function calculate.process(raw)
 		{ 0, math.cos(ship_zy), -math.sin(ship_zy) },
 		{ 0, math.sin(ship_zy), math.cos(ship_zy) },
 	})
-
-	ship_xz = get_yaw(yaw_vector)
-	ship_xz = math.atan2(ship_xz.y, ship_xz.x)
-	Ry = matrix:new({
-		{ math.cos(ship_xz), 0, -math.sin(ship_xz) },
-		{ 0, 1, 0 },
-		{ -math.sin(ship_xz), 0, -math.cos(ship_xz) },
-	})
 	invert_Rz = matrix:new({
 		{ math.cos(-ship_xy), -math.sin(-ship_xy), 0 },
 		{ math.sin(-ship_xy), math.cos(-ship_xy), 0 },
@@ -163,6 +155,14 @@ function calculate.process(raw)
 		{ 1, 0, 0 },
 		{ 0, math.cos(-ship_zy), -math.sin(-ship_zy) },
 		{ 0, math.sin(-ship_zy), math.cos(-ship_zy) },
+	})
+
+	ship_xz = get_yaw(yaw_vector)
+	ship_xz = math.atan2(ship_xz.y, ship_xz.x)
+	Ry = matrix:new({
+		{ math.cos(ship_xz), 0, -math.sin(ship_xz) },
+		{ 0, 1, 0 },
+		{ -math.sin(ship_xz), 0, -math.cos(ship_xz) },
 	})
 	invert_Ry = matrix:new({
 		{ math.cos(-ship_xz), 0, math.sin(-ship_xz) },
